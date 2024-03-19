@@ -51,10 +51,9 @@ if check_password():
 
     def load_data():
         # Define the scope
-        scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-
-        # Add credentials to the account
-        creds = ServiceAccountCredentials.from_json_keyfile_name('spdata-417718-5baef1712355.json', scope)
+        secrets = st.secrets["gcp_service_account"]
+        scope = ['https://www.googleapis.com/auth/drive']
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(secrets, scope)
 
         # Authorize the clientsheet 
         client = gspread.authorize(creds)
