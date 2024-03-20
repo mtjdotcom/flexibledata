@@ -186,8 +186,10 @@ if check_password():
                     if "Unfortunately" in answer:
                          # Use a temporary file for the plot
                         # fig, ax = plt.subplots()
-                        with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as tmpfile:
-                            st.pyplot()
+                        image_path = 'exports/charts/temp_chart.png'
+                        # Display the image
+                        st.image(image_path, caption='Your Chart')
+                        # st.pyplot()
                         # st.set_option('deprecation.showPyplotGlobalUse', False)
                         # st.pyplot()
                     else:
