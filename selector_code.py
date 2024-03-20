@@ -234,15 +234,20 @@ if check_password():
         st.divider()
         def question_2(df):
             df['TVPI'] = ((df['Fund Distributions ($M)'] + df['Fund FMV ($M)'])/df['Fund Paid-In ($M)']).astype(float).round(1)
+            df['% Invested'] = ((df['Total Cost ($M)'] / df['Fund Size ($M)']) * 100).astype(float).round(1)
 
+            # Filter dataframe for % Invested > 80%
+            filtered_df = df[df['% Invested'] > 80]
+
+            # Categorize TVPI into bins
             bins = [-float('inf'), 1, 3, 5, float('inf')]
             labels = ['0-1x', '1-3x', '3-5x', '5x+']
+            filtered_df['Category'] = pd.cut(filtered_df['TVPI'], bins=bins, labels=labels, right=False)
 
-            # Categorize using cut
-            df['Category'] = pd.cut(df['TVPI'], bins=bins, labels=labels, right=False)
+            # Compute distribution
             df_2 = pd.DataFrame()
-            df_2['TVPI Category'] = df['Category'].value_counts()
-            df_2['Percent %'] = ((df_2['TVPI Category']/len(df)) * 100).round(1)
+            df_2['TVPI Category'] = filtered_df['Category'].value_counts()
+            df_2['Percent %'] = ((df_2['TVPI Category'] / len(filtered_df)) * 100).round(1)
 
             return(df_2)
         df_2 = question_2(df)
