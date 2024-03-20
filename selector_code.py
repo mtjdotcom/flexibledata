@@ -303,7 +303,7 @@ if check_password():
         st.altair_chart(chart, use_container_width=True)
 
         st.divider()
-
+        st.write('Same data but unstacked')
         # Group by 'Vintage Year' and 'Type', then get the median of 'Median Entry Valuation ($M)'
         seed_seriesA_median_valuation = df.groupby(['Vintage Year', 'Type'])['Median Entry Valuation ($M)'].median().unstack()
 
