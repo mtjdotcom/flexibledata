@@ -5,6 +5,8 @@ import pandas as pd
 import altair as alt
 import streamlit as st
 import matplotlib.pyplot as plt
+
+from dotenv import load_dotenv
 from pandasai.llm import OpenAI
 from pandasai import SmartDataframe
 from pandasai.responses.response_parser import ResponseParser
@@ -61,7 +63,6 @@ if check_password():
         # Open the sheet
         sheet_url = st.secrets["private_gsheets_url"] 
         sheet = client.open_by_url(sheet_url)
-        # Get the first sheet of the Spreadsheet
         sheet_instance = sheet.get_worksheet(0)
 
         # Convert to DataFrame
@@ -73,42 +74,7 @@ if check_password():
         data = data.round(1)
         return data
 
-    # def load_data():
-    #     data = pd.read_csv('PUT YOUR DATA HERE')
-    #     # Convert 'Close Date' to datetime and extract 'Year' and 'Quarter'
-    #     data['Close Date'] = pd.to_datetime(data['Close Date'])
-    #     # Create 'Year_Quarter' column combining 'Year' and 'Quarter', e.g., Q2 2020
-    #     data['Close Quarter Year'] = data['Close Date'].dt.year.astype(str) + " Q" + data['Close Date'].dt.quarter.astype(str)
-    #     data = data.round(1)
-    #     return data
-
     df = load_data()
-
-    # testing chart functionality
-    # class StreamlitResponse(ResponseParser):
-    #     def __init__(self, context) -> None:
-    #         super().__init__(context)
-
-    #     def format_dataframe(self, result):
-    #         st.dataframe(result["value"])
-    #         return
-
-    #     def format_plot(self, result):
-    #         st.image(result["value"])
-    #         return
-
-    #     def format_other(self, result):
-    #         st.write(result["value"])
-    #         return
-
-
-    # class StreamlitCallback(BaseCallback):
-    #     def __init__(self, container) -> None:
-    #         """Initialize callback handler."""
-    #         self.container = container
-
-    #     def on_code(self, response: str):
-    #         self.container.code(response)
 
     tab1, tab2, tab3 = st.tabs(["LP Data", "AI","Excel"])
 
@@ -196,46 +162,31 @@ if check_password():
             st.write(stats_summary)
         else:
             st.write("No statistical functions were selected for calculation.")
-
-         # After displaying the dataframe
-        # Check if 'Type' filter was applied
-        
        
 
     with tab2:
         #using Pandas AI https://pandas-ai.com/
         st.subheader("Chat with your Data")
-        st.caption("Please go easy on the API and my wallet. If you experience an error, try asking your request in a different way.")
-        st.caption("Try: Show me the average seed fund size by vintage year.")
+        st.caption("Try a table: Show me the average seed fund size by vintage year.")
+        st.caption("Try a chart: Show me a line chart of the median entry valuation by vintage year. Breakout Seed and Series A funds.")
+        st.caption("Please go easy on the API and my wallet! If you experience an error, try asking your request in a different way.")
         with st.expander('Your Data'):
             st.write(df)
 
         query = st.text_area("🗣️ Chat with your Data (using OpenAI)")
-        st.write(query)
-         
-        # query = st.text_area("🗣️ Chat with Dataframe")
-        # container = st.container()
         
-        if query:
-            llm = OpenAI(api_token=os.environ['OPENAI_API_KEY'])
-            query_engine = SmartDataframe(df, config={'llm': llm})
-        
-            answer = query_engine.chat(query)
-            st.write(answer)
+        if st.button('Generate Response'):
+            if query:
+                with st.spinner('Generating response...'):
+                    llm = OpenAI(api_token=os.environ['OPENAI_API_KEY'])
+                    query_engine = SmartDataframe(df, config={'llm': llm})
 
-
-        # if query:
-        #     llm = OpenAI(api_token=os.environ["OPENAI_API_KEY"])
-        #     query_engine = SmartDataframe(
-        #         df,
-        #         config={
-        #             "llm": llm,
-        #             "response_parser": StreamlitResponse,
-        #             "callback": StreamlitCallback(container),
-        #         },
-        #     )
-
-        #     answer = query_engine.chat(query)    
+                    answer = query_engine.chat(query)
+                    if "Unfortunately" in answer:
+                        st.set_option('deprecation.showPyplotGlobalUse', False)
+                        st.pyplot()
+                    else:
+                        st.write(answer)
 
     with tab3:
         #Question 1####################################################################################################################################
@@ -332,12 +283,11 @@ if check_password():
         # Resetting index to use 'Vintage Year' as a column for Altair
         df_4 = df_4.reset_index()
 
-        # Melting the DataFrame to long format, which Altair prefers for this type of chart
+        # Melting the DataFrame to long format, Altair prefers for this type of chart
         df_long = df_4.melt('Vintage Year', var_name='Type', value_name='Median Entry Valuation ($M)')
 
         # Creating the Altair chart
         chart = alt.Chart(df_long).mark_bar().encode(
-            # Combine 'Vintage Year' and 'Type' in the x encoding to place bars side by side
             x=alt.X('Vintage Year:N', title='Vintage Year', axis=alt.Axis(labels=True)),
             y=alt.Y('Median Entry Valuation ($M):Q', title='Median Entry Valuation ($M)'),
             color='Type:N'
