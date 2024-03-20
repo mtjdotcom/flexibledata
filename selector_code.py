@@ -186,7 +186,7 @@ if check_password():
                     if "Unfortunately" in answer:
                          # Use a temporary file for the plot
                         # fig, ax = plt.subplots()
-                        image_path = 'exports/charts/temp_chart.png'
+                        image_path = '/mount/src/flexibledata/exports/charts/temp_chart.png'
                         # Display the image
                         st.image(image_path, caption='Your Chart')
                         # st.pyplot()
