@@ -1,11 +1,11 @@
 import os
 import gspread
+import tempfile
 import numpy as np
 import pandas as pd
 import altair as alt
 import streamlit as st
 import matplotlib.pyplot as plt
-
 from dotenv import load_dotenv
 from pandasai.llm import OpenAI
 from pandasai import SmartDataframe
@@ -63,6 +63,7 @@ if check_password():
         # Open the sheet
         sheet_url = st.secrets["private_gsheets_url"] 
         sheet = client.open_by_url(sheet_url)
+        # Get the first sheet of the Spreadsheet
         sheet_instance = sheet.get_worksheet(0)
 
         # Convert to DataFrame
@@ -183,8 +184,12 @@ if check_password():
 
                     answer = query_engine.chat(query)
                     if "Unfortunately" in answer:
-                        st.set_option('deprecation.showPyplotGlobalUse', False)
-                        st.pyplot()
+                         # Use a temporary file for the plot
+                        # fig, ax = plt.subplots()
+                        with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as tmpfile:
+                            st.pyplot()
+                        # st.set_option('deprecation.showPyplotGlobalUse', False)
+                        # st.pyplot()
                     else:
                         st.write(answer)
 
@@ -283,11 +288,12 @@ if check_password():
         # Resetting index to use 'Vintage Year' as a column for Altair
         df_4 = df_4.reset_index()
 
-        # Melting the DataFrame to long format, Altair prefers for this type of chart
+        # Melting the DataFrame to long format, which Altair prefers for this type of chart
         df_long = df_4.melt('Vintage Year', var_name='Type', value_name='Median Entry Valuation ($M)')
 
         # Creating the Altair chart
         chart = alt.Chart(df_long).mark_bar().encode(
+            # Combine 'Vintage Year' and 'Type' in the x encoding to place bars side by side
             x=alt.X('Vintage Year:N', title='Vintage Year', axis=alt.Axis(labels=True)),
             y=alt.Y('Median Entry Valuation ($M):Q', title='Median Entry Valuation ($M)'),
             color='Type:N'
