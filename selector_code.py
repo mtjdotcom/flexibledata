@@ -167,7 +167,7 @@ if check_password():
         #using Pandas AI https://pandas-ai.com/
         st.subheader("Chat with your data")
         st.caption("Try a table: Show me the average seed fund size by vintage year.")
-        st.caption("Try a chart: Create a bar chart showing average seed fund size and series a fund size by vintage year. Or try, Create a scatter plot showing fund size and close date. Color code by type, seed or series a.")
+        st.caption("Try a chart: Create a bar chart showing average seed fund size and series a fund size by vintage year. Or try, create a scatter plot showing fund size and close date. Color code by type.")
         st.caption("Please go easy on the API and my wallet! If you experience an error, try asking your request in a different way.")
         with st.expander('Your data'):
             st.write(df)
