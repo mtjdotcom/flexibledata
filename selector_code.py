@@ -79,7 +79,7 @@ if check_password():
 
     tab1, tab2, tab3 = st.tabs(["LP Data", "AI","Excel"])
 
-    st.sidebar.title("LPA Data Tab")
+    st.sidebar.title("LP Data Tab Selector")
     st.sidebar.subheader("Pivot and Group your Fund data")
 
     with tab1:
