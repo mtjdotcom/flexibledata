@@ -207,10 +207,10 @@ if check_password():
             df_1['Average Fund Size'] = df.groupby(group)['Fund Size ($M)'].mean().round(1)
             
             # Sum of invested capital at the underlying portfolio level by 'Vintage Year'
-            df_1['Invested Capital (Underlying Portfolio Level)'] = df.groupby(group)['Total Cost\n($M)'].sum().round(1)
+            df_1['Invested Capital (Underlying Portfolio Level)'] = df.groupby(group)['Total Cost ($M)'].sum().round(1)
             
             # Sum of total value at the underlying portfolio level by 'Vintage Year'
-            df_1['Total Value (Underlying Portfolio Level)'] = df.groupby(group)['Total Value\n($M)'].sum().round(1)
+            df_1['Total Value (Underlying Portfolio Level)'] = df.groupby(group)['Total Value ($M)'].sum().round(1)
             
             # Calculate the Gross MOC (Multiple of Cost) at the underlying portfolio level per 'Vintage Year'
             df_1['Gross MOC (Underlying Portfolio Level)'] = (df_1['Total Value (Underlying Portfolio Level)'] / df_1['Invested Capital (Underlying Portfolio Level)']).round(1)
@@ -233,7 +233,7 @@ if check_password():
         #create TVPI buckets
         st.divider()
         def question_2(df):
-            df['TVPI'] = ((df['Fund Distributions ($M)'] + df['Fund FMV ($M)'])/df['Fund \nPaid-In ($M)']).astype(float).round(1)
+            df['TVPI'] = ((df['Fund Distributions ($M)'] + df['Fund FMV ($M)'])/df['Fund Paid-In ($M)']).astype(float).round(1)
 
             bins = [-float('inf'), 1, 3, 5, float('inf')]
             labels = ['0-1x', '1-3x', '3-5x', '5x+']
