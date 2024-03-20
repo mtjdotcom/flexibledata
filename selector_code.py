@@ -167,7 +167,7 @@ if check_password():
         #using Pandas AI https://pandas-ai.com/
         st.subheader("Chat with your data")
         st.caption("Try a table: Show me the average seed fund size by vintage year.")
-        st.caption("Try a chart: Create a bar chart showing average seed fund size and series a fund size by vintage year.")
+        st.caption("Try a chart: Create a bar chart showing average seed fund size and series a fund size by vintage year. Or try, create a scatter plot of close date and median entry valuation. Color the dots based on Seed or Series A funds.")
         st.caption("Please go easy on the API and my wallet! If you experience an error, try asking your request in a different way.")
         with st.expander('Your data'):
             st.write(df)
@@ -226,11 +226,9 @@ if check_password():
             return(df_1)
         
         df_1 = question_1(df, 'Vintage Year')
-        st.write('Question 1')
-        st.dataframe(df_1)    
-
-
-
+        st.write('Question 1: Fill in provided data table.')
+        st.dataframe(df_1)
+        
         #Question2####################################################################################################################################
         #create TVPI buckets
         st.divider()
@@ -248,7 +246,7 @@ if check_password():
 
             return(df_2)
         df_2 = question_2(df)
-        st.write('Question 2')
+        st.write('Question 2: Fill in the chart below for funds that are over 80% invested (portfolio level cost/fund size).')
         st.table(df_2)
 
         #question 3####################################################################################################################################
@@ -263,7 +261,7 @@ if check_password():
         sorted_df.loc[condition, 'Avg. Fundraising Time Between Funds (Yrs)'] = np.nan
 
         df_3 = sorted_df.groupby('Vintage Year')['Avg. Fundraising Time Between Funds (Yrs)'].mean().round(1)
-        st.write('Question 3')
+        st.write('Question 3: What is the average time it took to raise funds in the vintages listed below (time between the fund with this vintage and the fund prior). Please calculate in years.')
         st.dataframe(df_3)
 
         #question 4####################################################################################################################################
@@ -277,7 +275,7 @@ if check_password():
         seed_seriesA_median_valuation.fillna(0, inplace=True)
         df_4 = seed_seriesA_median_valuation[['Seed', 'Series A']]
 
-        st.write('Question 4')
+        st.write('Question 4: Create a chart showing the median entry valuation for seed and Series A funds by vintage year.  Please also create a graph to show the data to the right.')
         st.dataframe(df_4)    
 
         # Resetting index to use 'Vintage Year' as a column for Altair
@@ -338,7 +336,7 @@ if check_password():
         st.divider()
         #Question 5################################################################################################################################################
         df_5 = df.groupby('Type')['Commitment ($M)'].mean().round(1)
-        st.write('Question 5')
+        st.write('Question 5a:  What is the average commitment ($) to a seed fund? To a Series A fund?')
         st.dataframe(df_5)   
 
         st.divider()
@@ -350,5 +348,5 @@ if check_password():
         port_level['FoF NAV'] = port_level['% of Fund'] * port_level['Total Value\n($M)'] 
         port_level['FoF TVPI'] = (port_level['FoF Dist'] + port_level['FoF NAV'])/port_level['FoF Paid-in']
         df_6 = ((port_level['FoF Dist'].sum() + port_level['FoF NAV'].sum()) / port_level['FoF Paid-in'].sum()).round(2)
-        st.write('Question 6')
+        st.write('Question 5b: What is the overall Emerald Gross TVPI (total value / paid-in, without additional fees and carry) for this total portfolio based on the fund returns shown?')
         st.write(df_6)
