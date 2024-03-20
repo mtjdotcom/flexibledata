@@ -165,14 +165,14 @@ if check_password():
 
     with tab2:
         #using Pandas AI https://pandas-ai.com/
-        st.subheader("Chat with your Data")
+        st.subheader("Chat with your data")
         st.caption("Try a table: Show me the average seed fund size by vintage year.")
         st.caption("Try a chart: Create a bar chart showing average seed fund size and series a fund size by vintage year.")
         st.caption("Please go easy on the API and my wallet! If you experience an error, try asking your request in a different way.")
-        with st.expander('Your Data'):
+        with st.expander('Your data'):
             st.write(df)
 
-        query = st.text_area("🗣️ Chat with your Data (using OpenAI)")
+        query = st.text_area("🗣️ Chat with your data using OpenAI")
         
         if st.button('Generate Response'):
             if query:
