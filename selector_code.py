@@ -167,7 +167,7 @@ if check_password():
         #using Pandas AI https://pandas-ai.com/
         st.subheader("Chat with your data")
         st.caption("Try a table: Show me the average seed fund size by vintage year.")
-        st.caption("Try a chart: Create a bar chart showing average seed fund size and series a fund size by vintage year. Or try, create a scatter plot of close date and median entry valuation. Color the dots based on Seed or Series A funds.")
+        st.caption("Try a chart: Create a bar chart showing average seed fund size and series a fund size by vintage year. Or try, Create a scatter plot showing fund size and close date. Color code by type, seed or series a.")
         st.caption("Please go easy on the API and my wallet! If you experience an error, try asking your request in a different way.")
         with st.expander('Your data'):
             st.write(df)
@@ -178,7 +178,7 @@ if check_password():
             if query:
                 with st.spinner('Generating response...'):
                     llm = OpenAI(api_token=os.environ['OPENAI_API_KEY'])
-                    query_engine = SmartDataframe(df, config={'llm': llm})
+                    query_engine = SmartDataframe(df, config={'llm': llm, 'model': 'gpt-4'})
 
                     answer = query_engine.chat(query)
                     if ".png" in answer:
