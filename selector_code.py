@@ -349,6 +349,6 @@ if check_password():
         port_level['FoF Paid-in'] = port_level['% of Fund'] * port_level['Fund \nPaid-In ($M)']
         port_level['FoF NAV'] = port_level['% of Fund'] * port_level['Total Value\n($M)'] 
         port_level['FoF TVPI'] = (port_level['FoF Dist'] + port_level['FoF NAV'])/port_level['FoF Paid-in']
-        df_6 = (port_level['FoF Dist'].sum() + port_level['FoF NAV'].sum()) / port_level['FoF Paid-in'].sum().round(2)
+        df_6 = ((port_level['FoF Dist'].sum() + port_level['FoF NAV'].sum()) / port_level['FoF Paid-in'].sum()).round(2)
         st.write('Question 6')
         st.write(df_6)
