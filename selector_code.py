@@ -144,9 +144,7 @@ if check_password():
         else:
             # Display the filtered DataFrame
             st.caption('Use the slider on the left to select columns to group and to analyze. For example, you can group (aka pivot) your data by Vintage Year (first drop down) and then select numerical columns you wish to show in the table. You can further filter your data by Manager ("Group"), Type, or Geography.')
-
             st.write('Filtered Data:')
-
             st.dataframe(filtered_df)
 
 
@@ -169,7 +167,7 @@ if check_password():
         #using Pandas AI https://pandas-ai.com/
         st.subheader("Chat with your Data")
         st.caption("Try a table: Show me the average seed fund size by vintage year.")
-        st.caption("Try a chart: Show me a line chart of the median entry valuation by vintage year. Breakout Seed and Series A funds.")
+        st.caption("Try a chart: Create a bar chart showing average seed fund size and series a fund size by vintage year.")
         st.caption("Please go easy on the API and my wallet! If you experience an error, try asking your request in a different way.")
         with st.expander('Your Data'):
             st.write(df)
@@ -184,14 +182,9 @@ if check_password():
 
                     answer = query_engine.chat(query)
                     if ".png" in answer:
-                        # Use a temporary file for the plot
-                        # image_path = '/mount/src/flexibledata/exports/charts/temp_chart.png'
                         image_path = 'exports/charts/temp_chart.png'
                         # Display the image
-                        st.image(image_path, caption='Your Chart')
-                        # st.pyplot()
-                        # st.set_option('deprecation.showPyplotGlobalUse', False)
-                        # st.pyplot()
+                        st.image(image_path)
                     else:
                         st.write(answer)
 
@@ -356,6 +349,6 @@ if check_password():
         port_level['FoF Paid-in'] = port_level['% of Fund'] * port_level['Fund \nPaid-In ($M)']
         port_level['FoF NAV'] = port_level['% of Fund'] * port_level['Total Value\n($M)'] 
         port_level['FoF TVPI'] = (port_level['FoF Dist'] + port_level['FoF NAV'])/port_level['FoF Paid-in']
-        df_6 = (port_level['FoF Dist'].sum() + port_level['FoF NAV'].sum()) / port_level['FoF Paid-in'].sum()
+        df_6 = (port_level['FoF Dist'].sum() + port_level['FoF NAV'].sum()) / port_level['FoF Paid-in'].sum().round(2)
         st.write('Question 6')
         st.write(df_6)
