@@ -345,7 +345,7 @@ if check_password():
         port_level['% of Fund'] = port_level['Commitment ($M)']/port_level['Fund Size ($M)']
         port_level['FoF Dist'] = port_level['% of Fund'] * port_level['Fund Distributions ($M)']
         port_level['FoF Paid-in'] = port_level['% of Fund'] * port_level['Fund Paid-In ($M)']
-        port_level['FoF NAV'] = port_level['% of Fund'] * port_level['Total Value\n($M)'] 
+        port_level['FoF NAV'] = port_level['% of Fund'] * port_level['Total Value ($M)'] 
         port_level['FoF TVPI'] = (port_level['FoF Dist'] + port_level['FoF NAV'])/port_level['FoF Paid-in']
         df_6 = ((port_level['FoF Dist'].sum() + port_level['FoF NAV'].sum()) / port_level['FoF Paid-in'].sum()).round(2)
         st.write('Question 5b: What is the overall Gross TVPI (total value / paid-in, without additional fees and carry) for this total portfolio based on the fund returns shown?')
