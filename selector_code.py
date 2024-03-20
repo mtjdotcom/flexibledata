@@ -184,8 +184,9 @@ if check_password():
 
                     answer = query_engine.chat(query)
                     if "Unfortunately" in answer:
-                         # Use a temporary file for the plot
+                        # Use a temporary file for the plot
                         # fig, ax = plt.subplots()
+                        print(type(answer))
                         image_path = '/mount/src/flexibledata/exports/charts/temp_chart.png'
                         # Display the image
                         st.image(image_path, caption='Your Chart')
